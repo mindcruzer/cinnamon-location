@@ -64,10 +64,13 @@ MyApplet.prototype = {
 
         this.loadJsonAsync(GEO_IP_URL, function locationCallback (json) {
             let cityName = json.get_string_member('cityName');
-            cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+            let ip = json.get_string_member('ipAddress');
             
+            // city name is returned from IPInfoDB in upper case
+            cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+
             log(cityName);
-            this.set_applet_label(cityName);
+            this.set_applet_label(cityName + ' (' + ip + ')');
            
             Mainloop.timeout_add_seconds(60, Lang.bind(this, function refreshTimeout() {
                 this.refreshLocation();
