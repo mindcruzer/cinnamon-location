@@ -49,7 +49,7 @@ MyApplet.prototype = {
         this.refreshLocation();
     },
 
-    loadJsonAsync: function loadJsonAsync(url, callback, error_callback) {
+    loadJsonAsync: function loadJsonAsync(url, callback) {
         let context = this;
         let message = Soup.Message.new('GET', url);
         
