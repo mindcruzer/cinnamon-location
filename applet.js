@@ -8,6 +8,7 @@ const _ = Gettext.gettext;
 
 const UUID = "cinnamon-location@mindcruzer.com";
 const GEO_IP_URL = 'http://api.ipinfodb.com/v3/ip-city/?key=d115c954db28487f38c5d25d5dcf62a5786479b87cc852cabe8fd6f1971d7f89&format=json';
+const REFRESH_INTERVAL = 30
 
 const _httpSession = new Soup.SessionAsync();
 Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
@@ -48,34 +49,43 @@ MyApplet.prototype = {
         this.refreshLocation();
     },
 
-    loadJsonAsync: function loadJsonAsync(url, callback) {
+    loadJsonAsync: function loadJsonAsync(url, callback, error_callback) {
         let context = this;
         let message = Soup.Message.new('GET', url);
         
         _httpSession.queue_message(message, function soupQueue(session, message) {
-            let jp = new Json.Parser();
-            jp.load_from_data(message.response_body.data, -1);
-            callback.call(context, jp.get_root().get_object());
+            if (message.status_code === 200) {
+                let jp = new Json.Parser();
+                jp.load_from_data(message.response_body.data, -1);
+                callback.call(context, jp.get_root().get_object());
+            }
+            else {
+                // connection to IPInfoDB failed
+                callback.call(context, null);
+            }
         });
     },
 
     refreshLocation: function refreshLocation() {
-        log('Requesting location from IPInfoDB...');
-
         this.loadJsonAsync(GEO_IP_URL, function locationCallback (json) {
-            let cityName = json.get_string_member('cityName');
-            let ip = json.get_string_member('ipAddress');
-            
-            // city name is returned from IPInfoDB in upper case
-            cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+            if (json !== null) {
+                let cityName = json.get_string_member('cityName');
+                let ip = json.get_string_member('ipAddress');
+                
+                // city name is returned from IPInfoDB in upper case
+                cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+   
+                this.set_applet_label(cityName + ' (' + ip + ')');
+            }
+            else {
+                // error getting location
+                this.set_applet_label('...');
+            }
 
-            log(cityName);
-            this.set_applet_label(cityName + ' (' + ip + ')');
-           
-            Mainloop.timeout_add_seconds(60, Lang.bind(this, function refreshTimeout() {
+            Mainloop.timeout_add_seconds(REFRESH_INTERVAL, Lang.bind(this, function refreshTimeout() {
                 this.refreshLocation();
             }));
-        });
+        })
     }
 };
 
