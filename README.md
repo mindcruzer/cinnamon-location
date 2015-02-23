@@ -14,5 +14,4 @@ git clone https://github.com/mindcruzer/cinnamon-location.git cinnamon-location@
 
 ###API Key
 
-The API key for [IPInfoDB](http://ipinfodb.com/) is in `applet.js` in `GEO_IP_URL`. If you're going to actually 
-use this, I would be cool if you'd [sign up for your own](http://ipinfodb.com/register.php). It only takes a second.
+Register for an API key at [IPInfoDB](http://ipinfodb.com/register.php) and set it in `applet.js` for the `API_KEY` variable at the top of the file.
