@@ -7,7 +7,8 @@ const Gettext = imports.gettext.domain("cinnamon-applets");
 const _ = Gettext.gettext;
 
 const UUID = "cinnamon-location@mindcruzer.com";
-const GEO_IP_URL = 'http://api.ipinfodb.com/v3/ip-city/?key=d115c954db28487f38c5d25d5dcf62a5786479b87cc852cabe8fd6f1971d7f89&format=json';
+const API_KEY = '[YOUR API KEY HERE]';
+const GEO_IP_URL = 'http://api.ipinfodb.com/v3/ip-city/?key=' + API_KEY + '&format=json';
 const REFRESH_INTERVAL = 30
 
 const _httpSession = new Soup.SessionAsync();
