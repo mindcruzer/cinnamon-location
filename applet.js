@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2015 Sean Stewart
+ *
+ * Cinnamon Location Applet
+ * -------------------------
+ */
 const Applet = imports.ui.applet;
 const Soup = imports.gi.Soup;
 const Lang = imports.lang;
