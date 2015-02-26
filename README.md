@@ -12,6 +12,4 @@ cd ~/.local/share/cinnamon/applets/
 git clone https://github.com/mindcruzer/cinnamon-location.git cinnamon-location@mindcruzer.com
 ```
 
-###API Key
-
 Register for an API key at [IPInfoDB](http://ipinfodb.com/register.php) and set it in `applet.js` for the `API_KEY` variable at the top of the file.
